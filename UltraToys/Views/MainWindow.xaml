@@ -1,0 +1,112 @@
+<Window x:Class="UltraToys.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="UltraToys"
+        Width="700" Height="560"
+        MinWidth="480" MinHeight="360"
+        Background="{DynamicResource BgDeep}"
+        Icon="/Resources/app-icon.ico">
+    <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <TextBlock Text="UltraToys" FontSize="22" FontWeight="Bold"
+                       Foreground="{DynamicResource Accent}" Margin="0,0,0,4" />
+            <TextBlock Text="Caixa de ferramentas para Windows" Foreground="{DynamicResource TextSecondary}"
+                       Margin="0,0,0,20" />
+
+            <!-- Sempre no topo -->
+            <Border Background="{DynamicResource BgPanel}" CornerRadius="6" Padding="16" Margin="0,0,0,16">
+                <StackPanel>
+                    <DockPanel>
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding AlwaysOnTop.IsEnabled}"
+                                  VerticalAlignment="Center" />
+                        <TextBlock Text="Sempre no topo" FontSize="15" FontWeight="Bold" />
+                    </DockPanel>
+                    <TextBlock Margin="0,4,0,10" Foreground="{DynamicResource TextSecondary}">
+                        <Run Text="Atalho: " /><Run Text="{Binding AlwaysOnTop.HotkeyDisplay, Mode=OneWay}" />
+                    </TextBlock>
+
+                    <CheckBox Content="Mostrar borda ao redor de janelas fixadas"
+                              IsChecked="{Binding AlwaysOnTop.ShowBorderOverlay}" Margin="0,0,0,10" />
+
+                    <DockPanel Margin="0,0,0,8">
+                        <Button DockPanel.Dock="Right" Content="Atualizar lista" Style="{StaticResource NeutralButtonStyle}"
+                                Command="{Binding AlwaysOnTop.RefreshWindowsCommand}" />
+                        <TextBlock Text="Janelas abertas" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondary}" />
+                    </DockPanel>
+
+                    <ItemsControl ItemsSource="{Binding AlwaysOnTop.Windows}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{DynamicResource BgRow}" CornerRadius="4"
+                                        Padding="10,6" Margin="0,0,0,4">
+                                    <DockPanel>
+                                        <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsPinned}"
+                                                  VerticalAlignment="Center" Margin="0,0,10,0" />
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Title}" />
+                                            <TextBlock Text="{Binding ProcessName}" FontSize="10"
+                                                       Foreground="{DynamicResource TextMuted}" />
+                                        </StackPanel>
+                                    </DockPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Mover apps para Monitor -->
+            <Border Background="{DynamicResource BgPanel}" CornerRadius="6" Padding="16" Margin="0,0,0,16">
+                <StackPanel>
+                    <DockPanel>
+                        <CheckBox DockPanel.Dock="Right" IsChecked="{Binding MoveToMonitor.IsEnabled}"
+                                  VerticalAlignment="Center" />
+                        <TextBlock Text="Mover apps para Monitor" FontSize="15" FontWeight="Bold" />
+                    </DockPanel>
+                    <TextBlock Margin="0,4,0,10" Foreground="{DynamicResource TextSecondary}"
+                               Text="Move todas as janelas abertas para o monitor escolhido." />
+
+                    <DockPanel Margin="0,0,0,8">
+                        <Button DockPanel.Dock="Right" Content="Atualizar monitores" Style="{StaticResource NeutralButtonStyle}"
+                                Command="{Binding MoveToMonitor.RefreshMonitorsCommand}" />
+                        <TextBlock Text="Monitores detectados" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondary}" />
+                    </DockPanel>
+
+                    <ItemsControl ItemsSource="{Binding MoveToMonitor.Monitors}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource AccentButtonStyle}" Margin="0,0,8,8"
+                                        Command="{Binding DataContext.MoveToMonitor.MoveAllWindowsToMonitorCommand,
+                                                  RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}">
+                                    <StackPanel>
+                                        <TextBlock FontWeight="Bold">
+                                            <Run Text="Monitor" /><Run Text=" " /><Run Text="{Binding Index, Mode=OneWay}" />
+                                        </TextBlock>
+                                        <TextBlock FontSize="10">
+                                            <Run Text="{Binding Bounds.Width, Mode=OneWay, StringFormat={}{0:0}}" />
+                                            <Run Text="x" />
+                                            <Run Text="{Binding Bounds.Height, Mode=OneWay, StringFormat={}{0:0}}" />
+                                        </TextBlock>
+                                        <TextBlock Text="Principal" FontSize="10" FontStyle="Italic"
+                                                    Visibility="{Binding IsPrimary, Converter={StaticResource BoolToVisibility}}" />
+                                    </StackPanel>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Rodapé -->
+            <Border BorderBrush="{DynamicResource BorderSubtle}" BorderThickness="0,1,0,0" Padding="0,12,0,0">
+                <CheckBox Content="Iniciar com o Windows" IsChecked="{Binding StartWithWindows}" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>UltraToys</AssemblyName>
+    <RootNamespace>UltraToys</RootNamespace>
+    <ApplicationIcon>Resources\app-icon.ico</ApplicationIcon>
+    <Version>1.0.0</Version>
+    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Company>UltraToys</Company>
+    <Product>UltraToys</Product>
+    <Description>Caixa de ferramentas UltraToys</Description>
+    <Copyright>2026</Copyright>
+  </PropertyGroup>
+
+  <!-- Perfil de publicação release: single-file, self-contained, win-x64 -->
+  <PropertyGroup Condition="'$(PublishRelease)'=='true'">
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\app-icon.ico" />
+    <Resource Include="Resources\ultratoys-16.png" />
+    <Resource Include="Resources\ultratoys-32.png" />
+    <Resource Include="Resources\ultratoys-48.png" />
+    <Resource Include="Resources\ultratoys-128.png" />
+  </ItemGroup>
+
+</Project>

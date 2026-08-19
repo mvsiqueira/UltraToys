@@ -1,0 +1,25 @@
+# Build
+bin/
+obj/
+
+# Distribuição — inclui apenas a versão DLL (framework-dependent)
+dist/*
+!dist/*-dotnet/
+
+# Visual Studio / Rider
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docView.xml
+.idea/
+
+# dotnet publish output
+publish/
+
+# Configuração local do usuário (gerada ao rodar o app)
+settings.json
+
+# OS
+Thumbs.db
+.DS_Store
