@@ -6,13 +6,53 @@
         MinWidth="480" MinHeight="360"
         Background="{DynamicResource BgDeep}"
         Icon="/Resources/app-icon.ico">
-    <ScrollViewer Padding="20" VerticalScrollBarVisibility="Auto">
-        <StackPanel>
-            <TextBlock Text="UltraToys" FontSize="22" FontWeight="Bold"
-                       Foreground="{DynamicResource Accent}" Margin="0,0,0,4" />
-            <TextBlock Text="Caixa de ferramentas para Windows" Foreground="{DynamicResource TextSecondary}"
-                       Margin="0,0,0,20" />
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
+        <!-- CABEÇALHO -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource BgHeader}"
+                BorderBrush="{DynamicResource BorderSubtle}"
+                BorderThickness="0,0,0,1"
+                Padding="16,10">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+
+                <!-- Ícone UltraToys: glifo dourado -->
+                <Viewbox Width="40" Height="40" Margin="0,0,12,0" VerticalAlignment="Center">
+                    <Canvas Width="48" Height="48">
+                        <Path Data="M 8.5,14 A 5.5,5.5 0 1 0 19.5,14 A 5.5,5.5 0 1 0 8.5,14 Z
+                                    M 28.5,14 A 5.5,5.5 0 1 0 39.5,14 A 5.5,5.5 0 1 0 28.5,14 Z
+                                    M 11,26 A 13,13 0 1 0 37,26 A 13,13 0 1 0 11,26 Z
+                                    M 11.6,14 A 2.4,2.4 0 1 0 16.4,14 A 2.4,2.4 0 1 0 11.6,14 Z
+                                    M 31.6,14 A 2.4,2.4 0 1 0 36.4,14 A 2.4,2.4 0 1 0 31.6,14 Z
+                                    M 17.1,24 A 1.9,1.9 0 1 0 20.9,24 A 1.9,1.9 0 1 0 17.1,24 Z
+                                    M 27.1,24 A 1.9,1.9 0 1 0 30.9,24 A 1.9,1.9 0 1 0 27.1,24 Z
+                                    M 21.4,30 A 2.6,2.6 0 1 0 26.6,30 A 2.6,2.6 0 1 0 21.4,30 Z">
+                            <Path.Fill>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0.85,1">
+                                    <GradientStop Offset="0" Color="#E7BE55" />
+                                    <GradientStop Offset="1" Color="#C4892C" />
+                                </LinearGradientBrush>
+                            </Path.Fill>
+                        </Path>
+                    </Canvas>
+                </Viewbox>
+
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="UltraToys" FontSize="18" FontWeight="Bold"
+                               Foreground="{DynamicResource HeaderFg}" />
+                    <TextBlock Text="Caixa de ferramentas para Windows" FontSize="11"
+                               Foreground="{DynamicResource HeaderFg}" Opacity="0.55" />
+                </StackPanel>
+
+            </StackPanel>
+        </Border>
+
+    <ScrollViewer Grid.Row="1" Padding="20" VerticalScrollBarVisibility="Auto">
+        <StackPanel>
             <!-- Sempre no topo -->
             <Border Background="{DynamicResource BgPanel}" CornerRadius="6" Padding="16" Margin="0,0,0,16">
                 <StackPanel>
@@ -109,4 +149,5 @@
             </Border>
         </StackPanel>
     </ScrollViewer>
+    </Grid>
 </Window>

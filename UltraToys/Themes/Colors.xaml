@@ -7,6 +7,10 @@
     <SolidColorBrush x:Key="BgRow" Color="#FF242424" />
     <SolidColorBrush x:Key="BgRowHover" Color="#FF2C2C2C" />
 
+    <!-- Cabeçalho -->
+    <SolidColorBrush x:Key="BgHeader" Color="#FF191919" />
+    <SolidColorBrush x:Key="HeaderFg" Color="#FFEDEDED" />
+
     <!-- Textos -->
     <SolidColorBrush x:Key="TextPrimary" Color="#FFEDEDED" />
     <SolidColorBrush x:Key="TextSecondary" Color="#FFA0A0A0" />
