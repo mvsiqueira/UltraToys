@@ -77,33 +77,51 @@ public partial class AlwaysOnTopViewModel : ObservableObject
 
     private void OnPinStateChanged(object? sender, IntPtr hwnd)
     {
+        var isPinned = _topmostService.IsPinned(hwnd);
+
         var row = Windows.FirstOrDefault(w => w.Hwnd == hwnd);
         if (row is not null)
         {
-            row.IsPinned = _topmostService.IsPinned(hwnd);
+            row.IsPinned = isPinned;
         }
 
-        PersistPinnedWindows();
+        // The pinned window may not be in the displayed list (e.g. pinned via hotkey after the last
+        // refresh), so fall back to a fresh lookup to get its process name and title.
+        var info = row is not null
+            ? new ManagedWindowInfo { Hwnd = hwnd, Title = row.Title, ProcessName = row.ProcessName }
+            : WindowEnumerationService.GetVisibleTopLevelWindows(_ownWindowHwnd).FirstOrDefault(w => w.Hwnd == hwnd);
+
+        if (info is not null)
+        {
+            UpdatePersistedPin(info, isPinned);
+        }
     }
 
-    // Rebuilds the persisted pinned-window list (by process name + title) from the hwnds
-    // TopmostService currently tracks, so a restart can best-effort re-pin them (PinnedWindowMatcher).
-    private void PersistPinnedWindows()
+    // Keeps the persisted pinned-window list (process name + title) in sync incrementally: pinning
+    // adds the window, unpinning removes only the identities that match it. Saved identities for
+    // windows that aren't open right now are left untouched, so they can be re-pinned on a later
+    // start (PinnedWindowMatcher) instead of being forgotten.
+    private void UpdatePersistedPin(ManagedWindowInfo info, bool isPinned)
     {
-        _settings.PinnedWindows.Clear();
-        foreach (var pinnedHwnd in _topmostService.PinnedWindows)
+        var list = _settings.PinnedWindows;
+        var changed = false;
+
+        if (isPinned)
         {
-            var row = Windows.FirstOrDefault(w => w.Hwnd == pinnedHwnd);
-            if (row is not null)
+            if (!list.Any(identity => PinnedWindowMatcher.Matches(identity, info)))
             {
-                _settings.PinnedWindows.Add(new PinnedWindowIdentity
-                {
-                    ProcessName = row.ProcessName,
-                    TitlePattern = row.Title,
-                });
+                list.Add(new PinnedWindowIdentity { ProcessName = info.ProcessName, TitlePattern = info.Title });
+                changed = true;
             }
         }
+        else
+        {
+            changed = list.RemoveAll(identity => PinnedWindowMatcher.Matches(identity, info)) > 0;
+        }
 
-        _saveSettings();
+        if (changed)
+        {
+            _saveSettings();
+        }
     }
 }
