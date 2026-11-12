@@ -13,7 +13,7 @@ public partial class PasteAsPlainTextViewModel : ObservableObject
     [ObservableProperty]
     private bool isEnabled;
 
-    public string HotkeyDisplay => HotkeyParser.Format(_settings.Hotkey);
+    public HotkeyEditorViewModel Hotkey { get; }
 
     /// <summary>True when the tool is on but its hotkey could not be registered (taken by another app).</summary>
     public bool HotkeyConflict => IsEnabled && !_tool.IsHotkeyRegistered;
@@ -24,6 +24,13 @@ public partial class PasteAsPlainTextViewModel : ObservableObject
         _settings = settings;
         _saveSettings = saveSettings;
         isEnabled = settings.Enabled;
+
+        Hotkey = new HotkeyEditorViewModel(
+            tool.Hotkey,
+            new HotkeyConfig { Modifiers = "Win+Ctrl", Key = "V" },
+            () => _settings.Enabled,
+            saveSettings,
+            () => OnPropertyChanged(nameof(HotkeyConflict)));
     }
 
     partial void OnIsEnabledChanged(bool value)

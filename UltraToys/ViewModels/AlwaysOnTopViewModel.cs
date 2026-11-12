@@ -23,7 +23,10 @@ public partial class AlwaysOnTopViewModel : ObservableObject
     [ObservableProperty]
     private bool showBorderOverlay;
 
-    public string HotkeyDisplay => HotkeyParser.Format(_settings.Hotkey);
+    public HotkeyEditorViewModel Hotkey { get; }
+
+    /// <summary>True when the tool is on but its hotkey could not be registered (taken by another app).</summary>
+    public bool HotkeyConflict => IsEnabled && !_tool.IsHotkeyRegistered;
 
     public AlwaysOnTopViewModel(
         AlwaysOnTopTool tool,
@@ -42,6 +45,13 @@ public partial class AlwaysOnTopViewModel : ObservableObject
 
         isEnabled = settings.Enabled;
         showBorderOverlay = settings.ShowBorderOverlay;
+
+        Hotkey = new HotkeyEditorViewModel(
+            tool.Hotkey,
+            new HotkeyConfig { Modifiers = "Win+Ctrl", Key = "T" },
+            () => _settings.Enabled,
+            saveSettings,
+            () => OnPropertyChanged(nameof(HotkeyConflict)));
 
         _topmostService.PinStateChanged += OnPinStateChanged;
         RefreshWindows();
@@ -65,6 +75,7 @@ public partial class AlwaysOnTopViewModel : ObservableObject
         _settings.Enabled = value;
         if (value) _tool.Start(); else _tool.Stop();
         _saveSettings();
+        OnPropertyChanged(nameof(HotkeyConflict));
     }
 
     partial void OnShowBorderOverlayChanged(bool value)

@@ -52,6 +52,33 @@ public sealed class HotkeyService : IDisposable
         _handlers.Remove(id);
     }
 
+    private readonly List<GlobalHotkey> _hotkeys = new();
+
+    internal void Track(GlobalHotkey hotkey) => _hotkeys.Add(hotkey);
+
+    /// <summary>Releases all of the app's hotkeys (remembering which were active), e.g. while the shortcut editor listens.</summary>
+    internal void SuspendAll()
+    {
+        foreach (var hotkey in _hotkeys) hotkey.Suspend();
+    }
+
+    internal void ResumeAll()
+    {
+        foreach (var hotkey in _hotkeys) hotkey.Resume();
+    }
+
+    /// <summary>Another tracked hotkey configured with the same combination, if any.</summary>
+    internal GlobalHotkey? FindOther(GlobalHotkey self, string modifiers, string key)
+    {
+        if (!HotkeyParser.TryParse(new Models.HotkeyConfig { Modifiers = modifiers, Key = key }, out var wantedModifiers, out var wantedKey))
+            return null;
+
+        return _hotkeys.FirstOrDefault(other =>
+            !ReferenceEquals(other, self) &&
+            HotkeyParser.TryParse(other.Config, out var otherModifiers, out var otherKey) &&
+            otherModifiers == wantedModifiers && otherKey == wantedKey);
+    }
+
     private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
         if (msg == unchecked((int)NativeMethods.WM_HOTKEY))

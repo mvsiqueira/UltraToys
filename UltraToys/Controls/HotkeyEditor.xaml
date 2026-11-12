@@ -1,0 +1,23 @@
+<UserControl x:Class="UltraToys.Controls.HotkeyEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <!-- Clique para gravar um novo atalho: a próxima combinação digitada vira o atalho. -->
+            <Button x:Name="CaptureButton" MinWidth="170"
+                    Style="{StaticResource NeutralButtonStyle}"
+                    Content="{Binding Display}"
+                    ToolTip="Clique e pressione a nova combinação (Esc cancela)"
+                    Click="OnCaptureClick"
+                    PreviewKeyDown="OnPreviewKeyDown"
+                    LostKeyboardFocus="OnLostKeyboardFocus" />
+            <Button Content="Restaurar padrão" Margin="8,0,0,0"
+                    Style="{StaticResource NeutralButtonStyle}"
+                    Command="{Binding ResetToDefaultCommand}"
+                    IsEnabled="{Binding CanReset}" />
+        </StackPanel>
+        <TextBlock Margin="0,6,0,0" TextWrapping="Wrap" Foreground="{DynamicResource Danger}"
+                   Text="{Binding Error}"
+                   Visibility="{Binding HasError, Converter={StaticResource BoolToVisibility}}" />
+    </StackPanel>
+</UserControl>

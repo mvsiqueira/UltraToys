@@ -7,12 +7,10 @@ namespace UltraToys.Services;
 /// overlay in sync with pin state, and contributes its own tray menu entry.</summary>
 public sealed class AlwaysOnTopTool : IUltraTool
 {
-    private readonly HotkeyService _hotkeyService;
     private readonly TopmostService _topmostService;
     private readonly BorderOverlayService _overlayService;
     private readonly AlwaysOnTopSettings _settings;
     private readonly Action _saveSettings;
-    private int? _hotkeyId;
 
     public AlwaysOnTopTool(
         HotkeyService hotkeyService,
@@ -21,7 +19,7 @@ public sealed class AlwaysOnTopTool : IUltraTool
         AlwaysOnTopSettings settings,
         Action saveSettings)
     {
-        _hotkeyService = hotkeyService;
+        Hotkey = new GlobalHotkey(DisplayName, hotkeyService, settings.Hotkey, ToggleForegroundWindow);
         _topmostService = topmostService;
         _overlayService = overlayService;
         _settings = settings;
@@ -35,23 +33,21 @@ public sealed class AlwaysOnTopTool : IUltraTool
     public string DisplayName => "Sempre no topo";
     public bool IsEnabled => _settings.Enabled;
 
+    public GlobalHotkey Hotkey { get; }
+
+    /// <summary>True while the global hotkey is registered. False when the tool is off or the
+    /// hotkey is already claimed by another app.</summary>
+    public bool IsHotkeyRegistered => Hotkey.IsRegistered;
+
     public void Start()
     {
-        if (!_settings.Enabled || _hotkeyId is not null) return;
-
-        if (HotkeyParser.TryParse(_settings.Hotkey, out var modifiers, out var key))
-        {
-            _hotkeyId = _hotkeyService.Register(modifiers, key, ToggleForegroundWindow);
-        }
+        if (!_settings.Enabled) return;
+        Hotkey.Register();
     }
 
     public void Stop()
     {
-        if (_hotkeyId is int id)
-        {
-            _hotkeyService.Unregister(id);
-            _hotkeyId = null;
-        }
+        Hotkey.Unregister();
         _overlayService.HideAll();
     }
 

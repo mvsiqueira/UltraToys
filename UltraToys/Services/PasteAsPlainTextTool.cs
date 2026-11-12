@@ -8,15 +8,13 @@ namespace UltraToys.Services;
 /// clipboard content with its plain-text version and pastes it into the focused app (Ctrl+V).</summary>
 public sealed class PasteAsPlainTextTool : IUltraTool
 {
-    private readonly HotkeyService _hotkeyService;
     private readonly PasteAsPlainTextSettings _settings;
     private readonly Action _saveSettings;
-    private int? _hotkeyId;
     private bool _busy;
 
     public PasteAsPlainTextTool(HotkeyService hotkeyService, PasteAsPlainTextSettings settings, Action saveSettings)
     {
-        _hotkeyService = hotkeyService;
+        Hotkey = new GlobalHotkey(DisplayName, hotkeyService, settings.Hotkey, OnHotkey);
         _settings = settings;
         _saveSettings = saveSettings;
     }
@@ -27,26 +25,17 @@ public sealed class PasteAsPlainTextTool : IUltraTool
 
     /// <summary>True while the global hotkey is registered. False when the tool is off or the
     /// hotkey is already claimed by another app.</summary>
-    public bool IsHotkeyRegistered => _hotkeyId is not null;
+    public bool IsHotkeyRegistered => Hotkey.IsRegistered;
+
+    public GlobalHotkey Hotkey { get; }
 
     public void Start()
     {
-        if (!_settings.Enabled || _hotkeyId is not null) return;
-
-        if (HotkeyParser.TryParse(_settings.Hotkey, out var modifiers, out var key))
-        {
-            _hotkeyId = _hotkeyService.Register(modifiers, key, OnHotkey);
-        }
+        if (!_settings.Enabled) return;
+        Hotkey.Register();
     }
 
-    public void Stop()
-    {
-        if (_hotkeyId is int id)
-        {
-            _hotkeyService.Unregister(id);
-            _hotkeyId = null;
-        }
-    }
+    public void Stop() => Hotkey.Unregister();
 
     public void BuildTrayMenuItems(ContextMenuStrip menu)
     {
