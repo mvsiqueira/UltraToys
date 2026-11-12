@@ -62,7 +62,8 @@ public partial class App : System.Windows.Application
         }
 
         var mainViewModel = new MainViewModel(
-            _settings.StartWithWindows, alwaysOnTopViewModel, moveToMonitorViewModel, ApplyStartWithWindows);
+            _settings.StartWithWindows, _settings.StartInTray, alwaysOnTopViewModel, moveToMonitorViewModel,
+            ApplyStartWithWindows, ApplyStartInTray);
         mainWindow.AttachViewModel(mainViewModel);
 
         _trayIconService = new TrayIconService(
@@ -77,7 +78,11 @@ public partial class App : System.Windows.Application
             });
         _trayIconService.Initialize();
 
-        mainWindow.Show();
+        // "Iniciar na bandeja": keep the window hidden at startup; the tray icon opens it.
+        if (!_settings.StartInTray)
+        {
+            mainWindow.Show();
+        }
     }
 
     private static void ShowMainWindow(Window window)
@@ -103,6 +108,12 @@ public partial class App : System.Windows.Application
     {
         _settings.StartWithWindows = enabled;
         AutostartService.EnsurePathCurrent(enabled);
+        PersistenceService.SaveSettings(_settings);
+    }
+
+    private void ApplyStartInTray(bool enabled)
+    {
+        _settings.StartInTray = enabled;
         PersistenceService.SaveSettings(_settings);
     }
 

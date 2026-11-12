@@ -20,6 +20,9 @@
 - [x] Detecção de monitores via `Screen.AllScreens` (mesmo padrão do UltraViagem)
 - [x] Persistência de configurações em `settings.json` ao lado do executável
 - [x] "Iniciar com o Windows" via `HKCU\...\Run`, autocorrigido se o app for movido/renomeado
+- [x] Seções da janela principal retráteis (Expander com seta e cabeçalho clicável)
+- [x] Seções em modo acordeão (expandir uma recolhe as outras); "Geral" no topo; ao abrir, só "Sempre no topo" fica expandida
+- [x] Seção "Geral" com "Iniciar com o Windows" e "Iniciar na bandeja" (abre sem mostrar a janela)
 - [x] Ícone do app integrado (exportado do Ultrasoft, `dourado-14b/ultratoys-14b`)
 - [x] Publicação single-file self-contained (`publish.ps1`)
 - [x] Publicação framework-dependent via DLL + launcher VBS silencioso (`publish-dotnet.ps1`)

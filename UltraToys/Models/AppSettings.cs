@@ -10,6 +10,10 @@ public class AppSettings
     [JsonPropertyName("start_with_windows")]
     public bool StartWithWindows { get; set; } = false;
 
+    /// <summary>When true, the app starts hidden in the tray instead of showing the main window.</summary>
+    [JsonPropertyName("start_in_tray")]
+    public bool StartInTray { get; set; } = false;
+
     [JsonPropertyName("window_width")]
     public double WindowWidth { get; set; } = 700;
 
