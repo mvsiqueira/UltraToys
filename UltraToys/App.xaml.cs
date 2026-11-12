@@ -55,7 +55,10 @@ public partial class App : System.Windows.Application
         var moveToMonitorTool = new MoveToMonitorTool(_settings.MoveToMonitor, SaveSettings, ownHwnd);
         var moveToMonitorViewModel = new MoveToMonitorViewModel(moveToMonitorTool, _settings.MoveToMonitor, SaveSettings);
 
-        _tools = new List<IUltraTool> { alwaysOnTopTool, moveToMonitorTool };
+        var pasteAsPlainTextTool = new PasteAsPlainTextTool(_hotkeyService, _settings.PasteAsPlainText, SaveSettings);
+        var pasteAsPlainTextViewModel = new PasteAsPlainTextViewModel(pasteAsPlainTextTool, _settings.PasteAsPlainText, SaveSettings);
+
+        _tools = new List<IUltraTool> { alwaysOnTopTool, moveToMonitorTool, pasteAsPlainTextTool };
         foreach (var tool in _tools)
         {
             if (tool.IsEnabled) tool.Start();
@@ -63,7 +66,7 @@ public partial class App : System.Windows.Application
 
         var mainViewModel = new MainViewModel(
             _settings.StartWithWindows, _settings.StartInTray, alwaysOnTopViewModel, moveToMonitorViewModel,
-            ApplyStartWithWindows, ApplyStartInTray);
+            pasteAsPlainTextViewModel, ApplyStartWithWindows, ApplyStartInTray);
         mainWindow.AttachViewModel(mainViewModel);
 
         _trayIconService = new TrayIconService(

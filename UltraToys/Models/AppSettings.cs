@@ -31,4 +31,7 @@ public class AppSettings
 
     [JsonPropertyName("move_to_monitor")]
     public MoveToMonitorSettings MoveToMonitor { get; set; } = new();
+
+    [JsonPropertyName("paste_as_plain_text")]
+    public PasteAsPlainTextSettings PasteAsPlainText { get; set; } = new();
 }

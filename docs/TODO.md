@@ -6,7 +6,9 @@
 - [ ] Editor de atalho: hoje o Win+Ctrl+T do "Sempre no topo" é fixo, sem UI para trocar
 - [ ] Guardar tamanho e posição da janela principal entre sessões (campos já existem em `AppSettings` mas não são aplicados/lidos no `MainWindow`)
 - [ ] Ícone real do app na barra de título / Alt+Tab da janela principal (hoje usa `Resources\app-icon.ico`, validar em todos os tamanhos)
-- [ ] Terceira ferramenta (a definir)
+- [ ] "Colar sem formatação": restaurar a área de transferência original (com formatação) depois de colar — hoje ela fica só com o texto simples
+- [ ] "Colar sem formatação": Win+Ctrl+V já é usado por outro programa/Windows em alguns PCs (o app avisa na seção); com o editor de atalho dá para trocar
+- [ ] Quarta ferramenta (a definir)
 
 ## Feito ✓
 - [x] Scaffold do projeto (WPF/.NET 10, MVVM + CommunityToolkit.Mvvm, estrutura Models/ViewModels/Views/Services)
@@ -21,8 +23,9 @@
 - [x] Persistência de configurações em `settings.json` ao lado do executável
 - [x] "Iniciar com o Windows" via `HKCU\...\Run`, autocorrigido se o app for movido/renomeado
 - [x] Seções da janela principal retráteis (Expander com seta e cabeçalho clicável)
-- [x] Seções em modo acordeão (expandir uma recolhe as outras); "Geral" no topo; ao abrir, só "Sempre no topo" fica expandida
+- [x] Seções em modo acordeão (expandir uma recolhe as outras); "Geral" no topo; ao abrir, todas ficam recolhidas
 - [x] Seção "Geral" com "Iniciar com o Windows" e "Iniciar na bandeja" (abre sem mostrar a janela)
+- [x] "Colar sem formatação": atalho global Win+Ctrl+V cola o texto sem formatação no app em foco (espera soltar as teclas, grava só texto na clipboard e envia Ctrl+V); aviso na janela se o atalho estiver ocupado
 - [x] Ícone do app integrado (exportado do Ultrasoft, `dourado-14b/ultratoys-14b`)
 - [x] Publicação single-file self-contained (`publish.ps1`)
 - [x] Publicação framework-dependent via DLL + launcher VBS silencioso (`publish-dotnet.ps1`)

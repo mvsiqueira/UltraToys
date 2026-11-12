@@ -9,6 +9,7 @@ public partial class MainViewModel : ObservableObject
 
     public AlwaysOnTopViewModel AlwaysOnTop { get; }
     public MoveToMonitorViewModel MoveToMonitor { get; }
+    public PasteAsPlainTextViewModel PasteAsPlainText { get; }
 
     [ObservableProperty]
     private bool startWithWindows;
@@ -21,6 +22,7 @@ public partial class MainViewModel : ObservableObject
         bool startInTray,
         AlwaysOnTopViewModel alwaysOnTop,
         MoveToMonitorViewModel moveToMonitor,
+        PasteAsPlainTextViewModel pasteAsPlainText,
         Action<bool> onStartWithWindowsChanged,
         Action<bool> onStartInTrayChanged)
     {
@@ -28,6 +30,7 @@ public partial class MainViewModel : ObservableObject
         _onStartInTrayChanged = onStartInTrayChanged;
         AlwaysOnTop = alwaysOnTop;
         MoveToMonitor = moveToMonitor;
+        PasteAsPlainText = pasteAsPlainText;
         this.startWithWindows = startWithWindows;
         this.startInTray = startInTray;
     }

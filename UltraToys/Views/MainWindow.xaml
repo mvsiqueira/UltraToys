@@ -69,7 +69,7 @@
                 </Expander>
 
                 <!-- Sempre no topo -->
-                <Expander Style="{StaticResource SectionExpanderStyle}" Margin="0,0,0,16" IsExpanded="True">
+                <Expander Style="{StaticResource SectionExpanderStyle}" Margin="0,0,0,16" IsExpanded="False">
                     <Expander.Header>
                         <DockPanel>
                             <CheckBox DockPanel.Dock="Right" IsChecked="{Binding AlwaysOnTop.IsEnabled}"
@@ -113,7 +113,7 @@
                 </Expander>
 
                 <!-- Mover apps para Monitor -->
-                <Expander Style="{StaticResource SectionExpanderStyle}" IsExpanded="False">
+                <Expander Style="{StaticResource SectionExpanderStyle}" Margin="0,0,0,16" IsExpanded="False">
                     <Expander.Header>
                         <DockPanel>
                             <CheckBox DockPanel.Dock="Right" IsChecked="{Binding MoveToMonitor.IsEnabled}"
@@ -159,6 +159,27 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
+                    </StackPanel>
+                </Expander>
+
+                <!-- Colar sem formatação -->
+                <Expander Style="{StaticResource SectionExpanderStyle}" IsExpanded="False">
+                    <Expander.Header>
+                        <DockPanel>
+                            <CheckBox DockPanel.Dock="Right" IsChecked="{Binding PasteAsPlainText.IsEnabled}"
+                                      VerticalAlignment="Center" />
+                            <TextBlock Text="Colar sem formatação" FontSize="15" FontWeight="Bold" />
+                        </DockPanel>
+                    </Expander.Header>
+                    <StackPanel>
+                        <TextBlock Margin="0,0,0,10" Foreground="{DynamicResource TextSecondary}">
+                            <Run Text="Atalho: " /><Run Text="{Binding PasteAsPlainText.HotkeyDisplay, Mode=OneWay}" />
+                        </TextBlock>
+                        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource TextSecondary}"
+                                   Text="Cola o texto da área de transferência sem formatação no app em foco. Depois do atalho, a área de transferência fica só com o texto simples." />
+                        <TextBlock Margin="0,10,0,0" TextWrapping="Wrap" Foreground="{DynamicResource Danger}"
+                                   Visibility="{Binding PasteAsPlainText.HotkeyConflict, Converter={StaticResource BoolToVisibility}}"
+                                   Text="Não foi possível registrar o atalho: ele já está em uso por outro aplicativo." />
                     </StackPanel>
                 </Expander>
 
